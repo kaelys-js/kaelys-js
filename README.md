@@ -1,16 +1,15 @@
-## Hi there 👋
+# kaelys-js
 
-<!--
-**kaelys-js/kaelys-js** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+> Builder. Shipping [Heron](https://github.com/kaelys-js/heron) and a handful of smaller tools.
 
-Here are some ideas to get you started:
+## What I'm working on
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- **[Heron](https://github.com/kaelys-js/heron)** -- AI-agnostic job-search automation.
+
+## Reach me
+
+- GitHub: [@kaelys-js](https://github.com/kaelys-js)
+- Sponsor: [github.com/sponsors/kaelys-js](https://github.com/sponsors/kaelys-js)
+- Discord: <https://discord.gg/8pRpHETxa4> (Heron community)
+
+<sub>This README auto-applies from `.github/workflows/maintain-user-features.yml` in the Heron repo. Edits made directly to this file are overwritten on the next reconcile.</sub>
