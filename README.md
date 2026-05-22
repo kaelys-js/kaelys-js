@@ -24,7 +24,7 @@ _A local-first software company. The monorepo is private while early products ma
 
 > _Stand still. Strike well._
 
-A thinking partner for career transitions. Local-first job-search platform: pipeline tracking, A–F role evaluation, ATS-optimized CVs, 11-portal scanning, recruiter email triage, interview prep, and opt-in autonomous apply. Runs on macOS, Windows, Linux, iOS, iPadOS, Android, and Apple Watch.
+Heron is a thinking partner for career transitions. Local-first job-search platform: pipeline tracking, A-F role evaluation, ATS-optimized CVs, 11-portal scanning, recruiter email triage, interview prep, and opt-in autonomous apply. Runs on macOS, Windows, Linux, iOS, iPadOS, Android, and Apple Watch.
 
 [![License](https://img.shields.io/github/license/kaelys-js/heron?color=blue)](https://github.com/kaelys-js/heron/blob/main/LICENSE)
 [![Build](https://github.com/kaelys-js/heron/actions/workflows/test.yml/badge.svg)](https://github.com/kaelys-js/heron/actions/workflows/test.yml)
