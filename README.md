@@ -18,7 +18,7 @@
 [![Sponsor](https://img.shields.io/github/sponsors/kaelys-js?label=sponsor&logo=githubsponsors&logoColor=white&color=ea4aaa)](https://github.com/sponsors/kaelys-js)
 [![Followers](https://img.shields.io/github/followers/kaelys-js?label=follow&style=social)](https://github.com/kaelys-js)
 
-[**GitHub**](https://github.com/kaelys-js) · [**Sponsor**](https://github.com/sponsors/kaelys-js) · [**Engineering**](AGENTS.md)
+[**GitHub**](https://github.com/kaelys-js) · [**Sponsor**](https://github.com/sponsors/kaelys-js)
 
 </div>
 
