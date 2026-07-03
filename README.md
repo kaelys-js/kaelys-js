@@ -13,6 +13,8 @@
 
 **Building [resist.js](https://github.com/kaelys-js) — local-first software.**
 
+<sub>Local-first · privacy-respecting · built with care.</sub>
+
 [![Sponsor](https://img.shields.io/github/sponsors/kaelys-js?label=sponsor&logo=githubsponsors&logoColor=white&color=ea4aaa)](https://github.com/sponsors/kaelys-js)
 [![Followers](https://img.shields.io/github/followers/kaelys-js?label=follow&style=social)](https://github.com/kaelys-js)
 
