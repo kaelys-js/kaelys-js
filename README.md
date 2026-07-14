@@ -55,9 +55,9 @@ for.
 
 ### [stardust](https://github.com/kaelys-js/stardust)  `wip`
 
-_Central pnpm monorepo — one organized workspace for kaelys-js personal projects._
+_Home for every personal project, sharing one toolchain and one release pipeline._
 
-One repo, one pinned toolchain, one lint/format/test entrypoint. Sibling repos migrate in as packages under packages/**, sharing a single mise-managed toolchain and one Turbo pipeline. Libraries have no build step; product containers are digest-pinned and deploy via typed valibot configs. Renovate keeps container images, npm dependencies, and the mise toolchain fresh under one auto-merge policy.
+Personal projects fragment across dozens of repos, each with their own lint, format, test, and deploy config. Stardust pulls them into one pnpm workspace under a single mise-managed toolchain and one Turbo pipeline. New work lands as packages under `packages/**`; existing repos migrate in one at a time. Renovate keeps container images, npm deps, and toolchain pins fresh under one auto-merge policy.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
@@ -70,18 +70,18 @@ One repo, one pinned toolchain, one lint/format/test entrypoint. Sibling repos m
 
 **Products**
 
-- `adguard` — Containerized AdGuard Home — the tailnet's global DNS ad-blocker.
-- `bark` — Self-hosted Bark push server — a POST turns into a native iOS push.
-- `brew` — Host-side Homebrew maintenance — self-updates, formula/cask upgrades, and Brewfile snapshots.
-- `checkrr` — Two-container media-integrity scanner that ffprobes the library and tells Sonarr/Radarr to re-grab corrupt files.
-- `code-mcp` — Host-side maintenance for the Claude Code MCP tools (cocoindex, serena) — upgrades, reindex, OOM-aware reaper.
-- `media` — The containerized half of the media stack — seerr, flaresolverr, and the loopback-only helpers around the native *arrs and Plex.
-- `mise` — Host-side mise toolchain maintenance — keeps the global mise pins reproducible and current.
-- `tailscale` — Host-side DR-authkey rotation — keeps the reusable tailnet auth key fresh so mac dr can bring the tailnet back non-interactively.
-- `vpn-base` — Digest-pinned Alpine base image baking WireGuard + reconnect + rotate tooling for the nordvpn-* containers.
-- `vpn-exit` — NordVPN WireGuard exit nodes, one per country, generated from a single registry — opt-in tailnet exit routing.
-- `vpn-torrent` — Dedicated NordVPN US WireGuard exit for qBittorrent — isolated, fail-closed, never leaks the family exit IP.
-- `watchdog` — One supervised container that health-checks every other product on a loop and pages Bark on failure.
+- `adguard` — Tailnet-wide DNS ad-blocker, powered by AdGuard Home in a container.
+- `bark` — iOS push server — POST a message, get a native push notification on your phone.
+- `brew` — Homebrew keeper for every Mac — updates formulas and casks on a schedule, then snapshots the Brewfile.
+- `checkrr` — Media-library integrity check that ffprobes every file and tells Sonarr or Radarr to re-grab anything corrupt.
+- `code-mcp` — Keeper for the Claude Code MCP tools (cocoindex, serena) — upgrades, re-indexes, and reaps runaway processes before they OOM the host.
+- `media` — Containerized half of the media stack — request router, captcha bypass, and the loopback helpers around the native *arrs and Plex.
+- `mise` — Keeps the global mise toolchain reproducible across every machine — one upgrade command, one snapshot per host.
+- `tailscale` — Rotates the reusable tailnet auth key so mac disaster-recovery can bring the network back without a human at the keyboard.
+- `vpn-base` — Alpine base image with WireGuard (the VPN tunnel protocol) plus the reconnect and rotate scripts every VPN container reuses.
+- `vpn-exit` — Per-country NordVPN WireGuard exit nodes generated from one registry — opt-in tailnet routing when a device needs a specific country's IP.
+- `vpn-torrent` — Isolated NordVPN WireGuard exit for qBittorrent — fail-closed, never leaks the family's regular exit IP.
+- `watchdog` — Fleet-wide health checker — loops through every product and pushes an iOS notification the moment one flips red.
 
 ### [foundation-registry](https://github.com/kaelys-js/foundation-registry)  `wip`
 
@@ -107,9 +107,9 @@ Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody ca
 
 ### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct)  `stable`
 
-_Run any number of Claude Desktop instances under different accounts on the same Mac._
+_Sign in to more than one Claude Desktop account on the same Mac, each in its own Dock-clickable app._
 
-Claude Desktop stores OAuth per-userData directory. `--user-data-dir` lets you point at a second one; combined with `CLAUDE_CONFIG_DIR` for the embedded Claude Code CLI, the same app binary boots into a different identity. This CLI automates the install (per-instance configDir + userData + Dock-clickable clone with rewritten CFBundleIdentifier), safe cross-instance session sharing (symlinks for JSONL + UI + agent metadata; rsync for Chromium storage), repair + doctor diagnostics, and three launchd agents that keep everything current.
+Claude Desktop only signs in to one Anthropic account at a time — switching means signing out and back in, and losing session history in between. This CLI clones the app once per account, wires each clone to its own OAuth directory (`--user-data-dir` + `CLAUDE_CONFIG_DIR`), and rewrites just enough of the bundle so the Dock lights the right icon for the right window. Sessions and agent metadata are shared safely across clones via symlinks (JSONL, UI, agent) and rsync (Chromium storage), so history follows you between accounts. Ships with three launchd agents that keep clones fresh when Anthropic pushes an update.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
@@ -122,7 +122,7 @@ Claude Desktop stores OAuth per-userData directory. `--user-data-dir` lets you p
 
 **Products**
 
-- `claude-multiacct` — The CLI — install / uninstall / init / add-instance / remove-instance / list / repair / sync-now / sync-log / refresh-clones / doctor / qa.
+- `claude-multiacct` — CLI for installing account instances, sharing sessions between them, repairing drifted clones, and following the sync log.
 
 [homepage](https://github.com/kaelys-js/claude-multiacct) · [issues](https://github.com/kaelys-js/claude-multiacct/issues) · [discussions](https://github.com/kaelys-js/claude-multiacct/discussions)
 
