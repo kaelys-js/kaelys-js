@@ -59,14 +59,14 @@ _Central pnpm monorepo — one organized workspace for kaelys-js personal projec
 
 One repo, one pinned toolchain, one lint/format/test entrypoint. Sibling repos migrate in as packages under packages/**, sharing a single mise-managed toolchain and one Turbo pipeline. Libraries have no build step; product containers are digest-pinned and deploy via typed valibot configs. Renovate keeps container images, npm dependencies, and the mise toolchain fresh under one auto-merge policy.
 
-| | |
-|---|---|
-| Since | 2026 |
-| Language | TypeScript |
-| Visibility | private |
-| License | MIT |
-| Stack | TypeScript, pnpm, Turbo, mise, Docker, valibot |
-| Topics | `monorepo` `self-hosted` `homelab` `container-orchestration` |
+<dl>
+<dt>Since</dt><dd>2026</dd>
+<dt>Language</dt><dd>TypeScript</dd>
+<dt>Visibility</dt><dd>private</dd>
+<dt>License</dt><dd>MIT</dd>
+<dt>Stack</dt><dd>TypeScript, pnpm, Turbo, mise, Docker, valibot</dd>
+<dt>Topics</dt><dd>`monorepo` `self-hosted` `homelab` `container-orchestration`</dd>
+</dl>
 
 **Products**
 
@@ -85,25 +85,25 @@ One repo, one pinned toolchain, one lint/format/test entrypoint. Sibling repos m
 
 ### [foundation-registry](https://github.com/kaelys-js/foundation-registry)  `wip`
 
-_Business-as-Code governance registry — owned decision records for a shared client foundation._
+_Every decision the firm has made, stored as versioned Markdown records with schemas and clear ownership._
 
-A pnpm workspace that holds the firm's decision spine as Markdown-with-YAML-frontmatter records — PRDs, PDRs, ADRs, SPECs, Tasks, Releases — validated by a JSON Schema and routed to named GitHub teams via CODEOWNERS. Records are partitioned by domain (governance, build, design, frontend, backend, infra, security, data, observability) and cross-link into a PRD → PDR/ADR → SPEC → Tasks → Release spine. Not a runtime application; the record of what the firm decided and why.
+Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody can find the reasoning six months later. This repo keeps them as Markdown-with-YAML-frontmatter records — PRDs, PDRs, ADRs, SPECs, Tasks, Releases — validated by JSON Schema and routed to named teams via CODEOWNERS. Records partition by domain (governance, design, frontend, backend, infra, security, data, observability) and cross-link forward: PRD → PDR/ADR → SPEC → Tasks → Release. It's the record of what the firm decided and why — not a runtime application.
 
-| | |
-|---|---|
-| Since | 2026 |
-| Language | TypeScript |
-| Visibility | private |
-| Stack | TypeScript, pnpm, Turbo, mise, JSON Schema, Markdown |
-| Topics | `adr` `business-as-code` `decision-records` `governance` `prd` `registry` `spec` |
+<dl>
+<dt>Since</dt><dd>2026</dd>
+<dt>Language</dt><dd>TypeScript</dd>
+<dt>Visibility</dt><dd>private</dd>
+<dt>Stack</dt><dd>TypeScript, pnpm, Turbo, mise, JSON Schema, Markdown</dd>
+<dt>Topics</dt><dd>`adr` `business-as-code` `decision-records` `governance` `prd` `registry` `spec`</dd>
+</dl>
 
 **Products**
 
-- `config` — @foundation/config — shared tsconfig base + every tool config (oxlint, oxfmt, taplo, syncpack, markdownlint, yamllint, commitlint, gitleaks, editorconfig, lefthook base).
-- `core` — @foundation/core — repoRoot() + miseExec() helpers, shared by qa and sync.
-- `qa` — @foundation/qa — lint/format dispatch over the whole tree, plus gitmeta / editorconfig / lefthook / schema checks.
-- `sync` — @foundation/sync — generated-file drift guards (versions, vendored schemas, turbo config, post-checkout/merge sync).
-- `registry` — @foundation/registry — the record spine (PRD/PDR/ADR/SPEC/tasks/release) + its JSON Schema validator + generated index site.
+- `config` — Shared configs for every tool the firm uses — tsconfig base, oxlint, oxfmt, taplo, syncpack, markdownlint, yamllint, commitlint, gitleaks, editorconfig, lefthook.
+- `core` — Small runtime helpers (repoRoot, miseExec) that qa and sync both depend on.
+- `qa` — Lint, format, and structural checks across the whole tree — gitmeta, editorconfig, lefthook, and JSON-schema validation, all under one command.
+- `sync` — Drift guard for generated files — version pins, vendored schemas, Turbo config, and the post-checkout/merge hooks that keep them in step.
+- `registry` — The record spine itself — PRD, PDR, ADR, SPEC, tasks, releases — validated against a JSON Schema and rendered as a browseable index site.
 
 ### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct)  `stable`
 
@@ -111,14 +111,14 @@ _Run any number of Claude Desktop instances under different accounts on the same
 
 Claude Desktop stores OAuth per-userData directory. `--user-data-dir` lets you point at a second one; combined with `CLAUDE_CONFIG_DIR` for the embedded Claude Code CLI, the same app binary boots into a different identity. This CLI automates the install (per-instance configDir + userData + Dock-clickable clone with rewritten CFBundleIdentifier), safe cross-instance session sharing (symlinks for JSONL + UI + agent metadata; rsync for Chromium storage), repair + doctor diagnostics, and three launchd agents that keep everything current.
 
-| | |
-|---|---|
-| Since | 2026 |
-| Language | Shell |
-| Visibility | public |
-| License | MIT |
-| Stack | Bash, bats, launchd, macos, mise |
-| Topics | `bash` `claude` `claude-desktop` `electron` `launchd` `macos` `multi-account` `oauth` |
+<dl>
+<dt>Since</dt><dd>2026</dd>
+<dt>Language</dt><dd>Shell</dd>
+<dt>Visibility</dt><dd>public</dd>
+<dt>License</dt><dd>MIT</dd>
+<dt>Stack</dt><dd>Bash, bats, launchd, macos, mise</dd>
+<dt>Topics</dt><dd>`bash` `claude` `claude-desktop` `electron` `launchd` `macos` `multi-account` `oauth`</dd>
+</dl>
 
 **Products**
 
