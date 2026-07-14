@@ -1,0 +1,38 @@
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = tab
+indent_size = 2
+tab_width = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+# YAML (tabs are invalid per YAML spec)
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Shell (shfmt reads these directly)
+[*.{sh,bash}]
+indent_style = space
+indent_size = 2
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+
+# Markdown (trailing whitespace = line breaks)
+[*.{md,mdx}]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Lock files — don't reformat
+[{package-lock.json,pnpm-lock.yaml,mise.lock,*.lock}]
+indent_style = unset
+indent_size = unset
+trim_trailing_whitespace = false
+insert_final_newline = unset

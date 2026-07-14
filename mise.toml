@@ -1,0 +1,43 @@
+# mise.toml — self-contained toolchain pin for kaelys-js/kaelys-js.
+# Clone + `mise install` gets node + pnpm + yq + gitleaks + yamllint + markdownlint-cli2
+# with no machine-global dependency. Docs: https://mise.jdx.dev/configuration.html
+
+min_version = "2026.5.0"
+
+[settings]
+# Read .nvmrc as Node's version source, kept in lockstep with [tools].node.
+idiomatic_version_file_enable_tools = ["node"]
+# mise owns pnpm; corepack off.
+node.corepack = false
+# Faster install path — uses precompiled binaries when available.
+experimental = true
+# Explicit installs only — no surprise multi-GB compiles on `mise activate`.
+auto_install = false
+# Lockfile — refuses installs whose SHA doesn't match once mise.lock exists.
+lockfile = true
+
+[env]
+# Workspace-scoped tool installations — all binaries live inside the repo.
+MISE_INSTALLS_DIR = "{{config_root}}/.mise/installs"
+
+[tools]
+# Node — matches stardust (26.5.0, latest).
+node = "26.5.0"
+# pnpm — matches stardust.
+pnpm = "11.12.0"
+
+# ── ts/js lint + format ──────────────────────────────────────────────
+"npm:oxlint" = "1.73.0"
+"npm:oxfmt" = "0.58.0"
+
+# ── yaml (lint) ──────────────────────────────────────────────────────
+yamllint = "1.38.0"
+
+# ── yaml query (used by scripts/setup-catalog-app.sh for gh api output) ─
+yq = "4.44.6"
+
+# ── markdown lint ────────────────────────────────────────────────────
+"npm:markdownlint-cli2" = "0.23.0"
+
+# ── secrets scanning ─────────────────────────────────────────────────
+"aqua:gitleaks/gitleaks" = "8.30.1"

@@ -1,0 +1,8 @@
+{
+	"description": "GitHub-side description for alpha (should be shadowed by catalog-provided fields where those exist).",
+	"topics": ["github-topic-1", "github-topic-2"],
+	"primaryLanguage": "JavaScript",
+	"visibility": "public",
+	"license": "MIT",
+	"htmlUrl": "https://github.com/kaelys-js/alpha"
+}

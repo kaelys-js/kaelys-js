@@ -1,0 +1,32 @@
+# .gitattributes — normalize line endings (eol=lf) and classify text/binary.
+# https://git-scm.com/docs/gitattributes
+
+* text=auto eol=lf
+
+# Source
+*.ts text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+
+# Data & config
+*.json text eol=lf
+*.jsonc text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+
+# Docs
+*.md text eol=lf diff=markdown
+LICENSE text eol=lf
+README text eol=lf
+
+# Shell
+*.sh text eol=lf diff=bash
+
+# Lock files (preserve exactly)
+pnpm-lock.yaml text eol=lf -diff linguist-generated=true
+mise.lock text eol=lf -diff linguist-generated=true
+
+# Docs directory (linguist)
+docs/** linguist-documentation=true

@@ -1,0 +1,17 @@
+# Shell standard for kaelys-js — shellcheck config.
+# Formatting is shfmt's job (via .editorconfig); this file is lint only.
+
+shell=bash
+external-sources=true
+
+# Opt into the optional checks that catch real bugs:
+enable=avoid-nullary-conditions
+enable=check-extra-masked-returns
+enable=check-set-e-suppressed
+enable=deprecate-which
+
+# Full severity but silence the purely-stylistic rules:
+disable=SC2250 # "brace all variable references" — style only
+disable=SC2292 # "prefer [[ ]] over [ ]" — [ ] is intentional POSIX-portable
+disable=SC2312 # "command in condition masks return" — noisy under pipefail
+disable=SC2248 # "quote already-safe expansions" — style only

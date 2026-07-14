@@ -1,0 +1,60 @@
+# https://git-scm.com/docs/gitignore
+
+# Dependencies
+node_modules/
+.pnpm/
+.pnpm-store/
+
+# Testing / coverage
+coverage/
+.nyc_output/
+
+# Linting / formatting caches
+.oxlintcache
+.eslintcache
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.swp
+*.swo
+*~
+.history/
+
+# mise workspace-scoped installs
+.mise/
+!bin/mise
+
+# Claude Code workspace config
+.claude/*
+!.claude/settings.json
+
+# cocoindex (MCP) local semantic index
+.cocoindex_code/
+
+# Git worktrees
+.worktrees/
+
+# Lock files — DO NOT IGNORE
+!pnpm-lock.yaml
+
+# Scratch
+tmp/
+temp/
+.tmp/
+.temp/
+*.local

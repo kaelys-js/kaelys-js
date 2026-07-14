@@ -1,0 +1,62 @@
+# kaelys-js/kaelys-js CI. Every push + PR:
+#   - installs the pinned mise toolchain
+#   - runs oxlint + yaml/markdown lint + gitleaks
+#   - validates every committed catalog fixture against the schema
+#   - runs the node --test suite
+#
+# The sync-catalog workflow (sync-catalog.yml) is a separate, secrets-gated
+# job that only runs on schedule / dispatch / repository_dispatch.
+name: CI
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    name: lint + schema + test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # jdx/mise-action installs mise + every tool pinned in mise.toml
+      # (node, pnpm, oxlint, oxfmt, yamllint, yq, markdownlint-cli2, gitleaks).
+      - name: Install mise + pinned toolchain
+        uses: jdx/mise-action@v4
+
+      - name: Install workspace deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (oxlint)
+        run: pnpm lint
+
+      - name: Lint YAML
+        run: pnpm lint:yaml
+
+      - name: Lint Markdown
+        run: pnpm lint:markdown
+
+      - name: Secret scan (gitleaks)
+        run: pnpm lint:secrets
+
+      # Walks every catalog file we can see — this repo's fixtures + any
+      # sibling checkout under --repos-root — and validates against the schema.
+      # In CI we only have this repo checked out, so the check hits fixtures.
+      - name: Validate every committed catalog file against the schema
+        run: pnpm validate:schema
+
+      - name: Tests (node --test)
+        run: pnpm test

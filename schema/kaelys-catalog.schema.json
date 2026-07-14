@@ -1,0 +1,99 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/kaelys-js/kaelys-js/main/schema/kaelys-catalog.schema.json",
+	"title": "kaelys-catalog entry",
+	"description": "One repo's self-description, aggregated by kaelys-js/kaelys-js into the profile README's <!-- catalog:begin --> block.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["name", "tagline", "sellMe", "status"],
+	"properties": {
+		"$schema": {
+			"description": "Reference to this schema — allows editors to autocomplete + validate the file. Ignored by the sync script.",
+			"type": "string",
+			"format": "uri"
+		},
+		"name": {
+			"description": "Repo slug (matches the GitHub repo name).",
+			"type": "string",
+			"pattern": "^[a-z0-9-]+$",
+			"minLength": 1,
+			"maxLength": 100
+		},
+		"tagline": {
+			"description": "One-line hook. Rendered next to the repo name.",
+			"type": "string",
+			"minLength": 10,
+			"maxLength": 140
+		},
+		"sellMe": {
+			"description": "Paragraph pitch: what this is, why it exists, who it's for.",
+			"type": "string",
+			"minLength": 40,
+			"maxLength": 800
+		},
+		"status": {
+			"description": "Lifecycle stage — profile readers use this to gauge how ready the repo is.",
+			"type": "string",
+			"enum": ["stable", "beta", "alpha", "wip", "archived"]
+		},
+		"since": {
+			"description": "Year the repo was started.",
+			"type": "integer",
+			"minimum": 2020,
+			"maximum": 2100
+		},
+		"primaryLanguage": {
+			"description": "Primary language override. Defaults to the GitHub-detected language when omitted.",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 40
+		},
+		"technology": {
+			"description": "Free-form technology tags rendered as a comma-separated line.",
+			"type": "array",
+			"uniqueItems": true,
+			"items": { "type": "string", "minLength": 1, "maxLength": 40 }
+		},
+		"topics": {
+			"description": "GitHub topic-style tags. Defaults to the repo's GitHub topics when omitted.",
+			"type": "array",
+			"uniqueItems": true,
+			"items": { "type": "string", "minLength": 1, "maxLength": 50 }
+		},
+		"products": {
+			"description": "Named sub-components inside the repo (e.g. workspace packages).",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["name", "description"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"pattern": "^[a-z0-9-]+$",
+						"minLength": 1,
+						"maxLength": 60
+					},
+					"description": {
+						"type": "string",
+						"minLength": 5,
+						"maxLength": 300
+					}
+				}
+			}
+		},
+		"links": {
+			"description": "External URLs (docs, releases, homepage).",
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"homepage": { "type": "string", "format": "uri" },
+				"docs": { "type": "string", "format": "uri" },
+				"releases": { "type": "string", "format": "uri" },
+				"issues": { "type": "string", "format": "uri" },
+				"discussions": { "type": "string", "format": "uri" }
+			}
+		}
+	}
+}

@@ -1,0 +1,65 @@
+// markdownlint-cli2 standard for kaelys-js. Auto-discovered from the repo root.
+// Layout rules (line length, blank-line/whitespace) are off; the remaining
+// rules catch real documentation defects — broken structure, duplicate
+// headings, missing code-fence languages, bad emphasis-as-heading.
+{
+	"$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+	"config": {
+		"default": true,
+
+		// Layout — off.
+		"MD013": false, // line-length
+		"MD012": false, // multiple consecutive blank lines
+		"MD009": false, // trailing spaces
+
+		// Structure & correctness — on.
+		"MD003": { "style": "atx" },
+		"MD004": { "style": "dash" },
+		"MD007": { "indent": 2 },
+		"MD024": { "siblings_only": true },
+		"MD025": { "level": 1 },
+		"MD029": { "style": "ordered" },
+		"MD033": {
+			"allowed_elements": [
+				"br",
+				"details",
+				"summary",
+				"div",
+				"p",
+				"a",
+				"img",
+				"sub",
+				"sup",
+				"h1",
+				"strong",
+			],
+		},
+		"MD040": true,
+		"MD046": { "style": "fenced" },
+		"MD048": { "style": "backtick" },
+		"MD049": { "style": "underscore" },
+		"MD050": { "style": "asterisk" },
+
+		// First line need not be a top-level heading (comment/badges precede it).
+		"MD041": false,
+
+		// Some generated table styles differ; the sync-catalog renderer emits
+		// compact table style. Turn off MD060 (table-column-style) which is
+		// purely stylistic and would fight the deterministic renderer.
+		"MD060": false,
+
+		// Emphasis-as-heading — the catalog renderer intentionally uses
+		// **Products** as a mini-header inside a card. Not a real heading.
+		"MD036": false,
+	},
+	"globs": ["**/*.md", "**/*.mdx"],
+	"ignores": [
+		"node_modules",
+		".mise",
+		".cocoindex_code",
+		"dist",
+		"build",
+		"coverage",
+		"CHANGELOG.md",
+	],
+}

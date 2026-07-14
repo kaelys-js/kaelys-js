@@ -1,0 +1,46 @@
+# YAML standard for kaelys-js — SEMANTIC lint only. Layout (indentation,
+# spacing, line length) is not enforced here; keep an editor set to
+# .editorconfig and match the style of surrounding files.
+
+yaml-files:
+  - "*.yaml"
+  - "*.yml"
+  - ".yamllint"
+
+ignore: |
+  node_modules/
+  .cocoindex_code/
+  .mise/
+  pnpm-lock.yaml
+
+rules:
+  # Real bugs / ambiguity — enforced.
+  key-duplicates: enable
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+  anchors:
+    forbid-undeclared-aliases: true
+    forbid-duplicated-anchors: true
+    forbid-unused-anchors: true
+  truthy:
+    # GitHub Actions workflow keys legitimately use `on:` etc.
+    check-keys: false
+  key-ordering: disable
+  empty-values: disable
+
+  # Layout — disabled to keep the config small and avoid fighting editors.
+  indentation: disable
+  line-length: disable
+  document-start: disable
+  document-end: disable
+  trailing-spaces: disable
+  new-line-at-end-of-file: disable
+  brackets: disable
+  braces: disable
+  commas: disable
+  colons: disable
+  hyphens: disable
+  comments: disable
+  comments-indentation: disable
+  empty-lines: disable

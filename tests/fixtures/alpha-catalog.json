@@ -1,0 +1,18 @@
+{
+	"name": "alpha",
+	"tagline": "Sample product for the sync-catalog test fixture — deterministic render check.",
+	"sellMe": "A pretend project used by tests/sync-catalog.test.mjs to exercise every field the renderer supports. If this text ends up in the profile README, something is wrong.",
+	"status": "beta",
+	"since": 2024,
+	"primaryLanguage": "TypeScript",
+	"technology": ["Node.js", "Vitest"],
+	"topics": ["fixture", "sample"],
+	"products": [
+		{ "name": "alpha-core", "description": "The core library." },
+		{ "name": "alpha-cli", "description": "The CLI front-end." }
+	],
+	"links": {
+		"homepage": "https://example.com/alpha",
+		"docs": "https://example.com/alpha/docs"
+	}
+}
