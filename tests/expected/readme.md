@@ -14,14 +14,14 @@ _Sample product for the sync-catalog test fixture — deterministic render check
 
 A pretend project used by tests/sync-catalog.test.mjs to exercise every field the renderer supports. If this text ends up in the profile README, something is wrong.
 
-| | |
-|---|---|
-| Since | 2024 |
-| Language | TypeScript |
-| Visibility | public |
-| License | MIT |
-| Stack | Node.js, Vitest |
-| Topics | `fixture` `sample` |
+<dl>
+<dt>Since</dt><dd>2024</dd>
+<dt>Language</dt><dd>TypeScript</dd>
+<dt>Visibility</dt><dd>public</dd>
+<dt>License</dt><dd>MIT</dd>
+<dt>Stack</dt><dd>Node.js, Vitest</dd>
+<dt>Topics</dt><dd>`fixture` `sample`</dd>
+</dl>
 
 **Products**
 
@@ -36,12 +36,12 @@ _Minimal fixture — only the required fields plus a since year._
 
 This entry has no products, no explicit topics, and no links. The renderer should fall back to the GitHub metadata for topics.
 
-| | |
-|---|---|
-| Since | 2026 |
-| Language | Python |
-| Visibility | private |
-| Topics | `fallback-topic` |
+<dl>
+<dt>Since</dt><dd>2026</dd>
+<dt>Language</dt><dd>Python</dd>
+<dt>Visibility</dt><dd>private</dd>
+<dt>Topics</dt><dd>`fallback-topic`</dd>
+</dl>
 
 <!-- catalog:end -->
 

@@ -234,9 +234,14 @@ function renderRepoCard(owner, catalog, metadata) {
 		factRows.push(["Topics", topics.map((t) => `\`${t}\``).join(" ")]);
 	}
 	if (factRows.length > 0) {
-		lines.push("| | |");
-		lines.push("|---|---|");
-		for (const [k, v] of factRows) lines.push(`| ${k} | ${v} |`);
+		// HTML <dl> keeps missing optional fields from rendering as empty rows
+		// — every row is emitted only when its value was set (see the
+		// factRows guards above), and the block is skipped entirely when
+		// there are no facts. Each dt/dd pair stays on one line so the
+		// entire block is a single HTML block for GitHub-flavored Markdown.
+		lines.push("<dl>");
+		for (const [k, v] of factRows) lines.push(`<dt>${k}</dt><dd>${v}</dd>`);
+		lines.push("</dl>");
 		lines.push("");
 	}
 

@@ -211,6 +211,80 @@ test("catalog name must match repo slug", () => {
 	assert.equal(readFileSync(readmePath, "utf8"), README_TEMPLATE);
 });
 
+test("required-only catalog renders no empty <dl> or blank rows", () => {
+	// Catalog with ONLY the schema-required fields (name/tagline/sellMe/
+	// status) + metadata reporting zero facts (no license, no topics, no
+	// primaryLanguage). The <dl> block must be omitted entirely — an
+	// empty <dl> or blank <dt></dt><dd></dd> pair would surface as a
+	// visible artifact on the profile README.
+	const scratch = mkdtempSync(join(tmpdir(), "sync-catalog-minreq-"));
+	mkdirSync(join(scratch, "fixtures"), { recursive: true });
+	writeFileSync(
+		join(scratch, "fixtures", "minreq-catalog.json"),
+		JSON.stringify(
+			{
+				name: "minreq",
+				tagline: "Minimum required — proves no blank rows leak through.",
+				sellMe: "This catalog has only the schema-required fields. No products, no license, no topics, no visibility fallback.",
+				status: "alpha",
+			},
+			null,
+			"\t",
+		),
+	);
+	writeFileSync(
+		join(scratch, "fixtures", "minreq-metadata.json"),
+		JSON.stringify(
+			{
+				description: null,
+				topics: [],
+				primaryLanguage: null,
+				visibility: null,
+				license: null,
+				htmlUrl: "https://github.com/kaelys-js/minreq",
+			},
+			null,
+			"\t",
+		),
+	);
+	writeFileSync(
+		join(scratch, "repos.json"),
+		JSON.stringify({ owner: "kaelys-js", repos: ["minreq"] }, null, "\t"),
+	);
+	const readmePath = join(scratch, "README.md");
+	writeFileSync(readmePath, README_TEMPLATE);
+
+	const result = runSync([
+		`--from-fixtures=${join(scratch, "fixtures")}`,
+		`--repos-config=${join(scratch, "repos.json")}`,
+		`--schema=${SCHEMA}`,
+		`--readme=${readmePath}`,
+	]);
+	assert.equal(result.status, 0, `sync failed: ${result.stderr}`);
+	const rendered = readFileSync(readmePath, "utf8");
+
+	// No <dl> block at all — every optional field is unset, so the
+	// renderer must skip the facts section entirely instead of emitting
+	// an empty <dl></dl>.
+	assert.ok(
+		!rendered.includes("<dl>"),
+		`required-only render must omit the <dl> block; got:\n${rendered}`,
+	);
+	// And obviously no blank rows.
+	assert.ok(!rendered.includes("<dt></dt>"), "no blank <dt></dt>");
+	assert.ok(!rendered.includes("<dd></dd>"), "no blank <dd></dd>");
+	// The row labels for optional fields must not appear either.
+	for (const label of ["Since", "Language", "Visibility", "License", "Stack", "Topics"]) {
+		assert.ok(
+			!rendered.includes(`<dt>${label}</dt>`),
+			`optional field "${label}" leaked into required-only render`,
+		);
+	}
+	// The required prose still lands.
+	assert.match(rendered, /Minimum required/);
+	assert.match(rendered, /minreq/);
+});
+
 test("missing markers surface a clear error", () => {
 	const { dir, readmePath } = makeScratch();
 	writeFileSync(readmePath, "# No markers here.\n");
