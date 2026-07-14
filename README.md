@@ -117,7 +117,7 @@ Claude Desktop stores OAuth per-userData directory. `--user-data-dir` lets you p
 | Language | Shell |
 | Visibility | public |
 | License | MIT |
-| Stack | Bash, bash, bats, launchd, macos, mise |
+| Stack | Bash, bats, launchd, macos, mise |
 | Topics | `bash` `claude` `claude-desktop` `electron` `launchd` `macos` `multi-account` `oauth` |
 
 **Products**
