@@ -1,7 +1,9 @@
-// tests/sync-catalog.test.mjs — hermetic tests for scripts/sync-catalog.mjs.
+// tests/sync-catalog.test.mjs — hermetic integration tests for
+// scripts/sync-catalog.mjs.
 //
-// Runs under `node --test`. No network — we use --from-fixtures to feed the
-// script hand-written catalog + metadata JSON, then assert:
+// Runs under vitest (see vitest.config.mjs). No network — we use
+// --from-fixtures to feed the script hand-written catalog + metadata JSON,
+// then assert:
 //   1. The render matches a checked-in expected Markdown fragment. This is the
 //      determinism guarantee — a change in the renderer must update the
 //      expected file, forcing a human review.
@@ -13,7 +15,7 @@
 //      in production.
 //   4. --schema-check-only walks tests/fixtures/*-catalog.json and passes.
 
-import { test } from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, cpSync, existsSync } from "node:fs";
@@ -225,7 +227,8 @@ test("required-only catalog renders no empty <dl> or blank rows", () => {
 			{
 				name: "minreq",
 				tagline: "Minimum required — proves no blank rows leak through.",
-				sellMe: "This catalog has only the schema-required fields. No products, no license, no topics, no visibility fallback.",
+				sellMe:
+					"This catalog has only the schema-required fields. No products, no license, no topics, no visibility fallback.",
 				status: "alpha",
 			},
 			null,

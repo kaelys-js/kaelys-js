@@ -1,0 +1,5 @@
+# pnpm 11 replaced the flat `onlyBuiltDependencies` list with this map:
+# `true` = allow the postinstall script (lefthook needs it to wire the
+# git hooks), `false` = deny.
+allowBuilds:
+  lefthook: true

@@ -6,22 +6,13 @@ useDefault = true
 
 [[allowlists]]
 description = "Lockfiles and vendored assets — integrity hashes, not secrets."
-paths = [
-	'''pnpm-lock\.yaml$''',
-	'''mise\.lock$''',
-	'''(^|/)\.mise/''',
-	'''(^|/)node_modules/''',
-]
+paths = ['''pnpm-lock\.yaml$''', '''mise\.lock$''', '''(^|/)\.mise/''', '''(^|/)node_modules/''']
 
 [[allowlists]]
 description = "Obvious non-secret placeholders used in docs and examples."
 regexTarget = "match"
-regexes = [
-	'''(?i)(example|sample|dummy|placeholder|changeme|your[-_]?(token|key|secret))''',
-]
+regexes = ['''(?i)(example|sample|dummy|placeholder|changeme|your[-_]?(token|key|secret))''']
 
 [[allowlists]]
 description = "Test fixture catalog files — hand-authored, never contain live secrets."
-paths = [
-	'''(^|/)tests/fixtures/''',
-]
+paths = ['''(^|/)tests/fixtures/''']

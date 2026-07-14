@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lefthook.json
+#
+# Git hooks for kaelys-js. Fast lint on pre-commit, full qa gate on pre-push.
+# Override locally via lefthook-local.yml (not committed).
+# Skip all hooks: LEFTHOOK=0 git commit ...
+
+commit-msg:
+  commands:
+    validate:
+      run: pnpm lint:commit {1}
+      fail_text: "Commit message does not follow conventional commits. See https://www.conventionalcommits.org"
+
+pre-commit:
+  piped: true
+  commands:
+    format:
+      priority: 1
+      run: pnpm format
+      stage_fixed: true
+      fail_text: "Formatting failed. Run 'pnpm qa:format' to fix."
+    lint:
+      priority: 2
+      run: pnpm qa:lint
+      fail_text: "Linting failed. Run 'pnpm qa:lint' to see failures."
+
+pre-push:
+  piped: true
+  commands:
+    lint:
+      priority: 1
+      run: pnpm qa:lint
+      fail_text: "Linting failed. Run 'pnpm qa:lint' to see failures."
+    format-check:
+      priority: 2
+      run: pnpm qa:format:check
+      fail_text: "Formatting drift. Run 'pnpm qa:format' to fix."
+    test-coverage:
+      priority: 3
+      run: pnpm qa:test:coverage
+      fail_text: "Coverage below threshold. Run 'pnpm test:coverage' to see the gap."

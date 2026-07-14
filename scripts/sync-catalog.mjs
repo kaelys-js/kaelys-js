@@ -51,19 +51,19 @@ const require = createRequire(import.meta.url);
 const Ajv = require("ajv/dist/2020.js");
 const addFormats = require("ajv-formats");
 
-const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const DEFAULT_SCHEMA_PATH = join(REPO_ROOT, "schema", "kaelys-catalog.schema.json");
-const DEFAULT_REPOS_PATH = join(REPO_ROOT, "catalog.repos.json");
-const DEFAULT_README_PATH = join(REPO_ROOT, "README.md");
+export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+export const DEFAULT_SCHEMA_PATH = join(REPO_ROOT, "schema", "kaelys-catalog.schema.json");
+export const DEFAULT_REPOS_PATH = join(REPO_ROOT, "catalog.repos.json");
+export const DEFAULT_README_PATH = join(REPO_ROOT, "README.md");
 
-const BEGIN_MARKER = "<!-- catalog:begin -->";
-const END_MARKER = "<!-- catalog:end -->";
+export const BEGIN_MARKER = "<!-- catalog:begin -->";
+export const END_MARKER = "<!-- catalog:end -->";
 
 // ---------------------------------------------------------------------------
 // CLI
 // ---------------------------------------------------------------------------
 
-function parseArgs(argv) {
+export function parseArgs(argv) {
 	const args = {
 		check: false,
 		fromFixtures: null,
@@ -76,9 +76,11 @@ function parseArgs(argv) {
 	for (const arg of argv.slice(2)) {
 		if (arg === "--check") args.check = true;
 		else if (arg === "--schema-check-only") args.schemaCheckOnly = true;
-		else if (arg.startsWith("--from-fixtures=")) args.fromFixtures = arg.slice("--from-fixtures=".length);
+		else if (arg.startsWith("--from-fixtures="))
+			args.fromFixtures = arg.slice("--from-fixtures=".length);
 		else if (arg.startsWith("--repos-root=")) args.reposRoot = arg.slice("--repos-root=".length);
-		else if (arg.startsWith("--repos-config=")) args.reposConfig = arg.slice("--repos-config=".length);
+		else if (arg.startsWith("--repos-config="))
+			args.reposConfig = arg.slice("--repos-config=".length);
 		else if (arg.startsWith("--readme=")) args.readme = arg.slice("--readme=".length);
 		else if (arg.startsWith("--schema=")) args.schema = arg.slice("--schema=".length);
 		else if (arg === "--help" || arg === "-h") {
@@ -92,7 +94,7 @@ function parseArgs(argv) {
 	return args;
 }
 
-function help() {
+export function help() {
 	return `Usage: node scripts/sync-catalog.mjs [--check] [--from-fixtures=DIR] [--schema-check-only] [--repos-root=DIR]
 
   --check                Exit non-zero if README would change; do not write.
@@ -111,16 +113,14 @@ function help() {
 // Schema
 // ---------------------------------------------------------------------------
 
-async function loadValidator(schemaPath) {
+export async function loadValidator(schemaPath) {
 	const schema = JSON.parse(await readFile(schemaPath, "utf8"));
 	const ajv = new Ajv({ allErrors: true, strict: true });
 	addFormats(ajv);
 	const validate = ajv.compile(schema);
 	return function assertValid(name, doc) {
 		if (!validate(doc)) {
-			const errs = validate.errors
-				.map((e) => `  ${e.instancePath || "/"} ${e.message}`)
-				.join("\n");
+			const errs = validate.errors.map((e) => `  ${e.instancePath || "/"} ${e.message}`).join("\n");
 			throw new Error(`kaelys-catalog.json for "${name}" is invalid:\n${errs}`);
 		}
 	};
@@ -130,7 +130,7 @@ async function loadValidator(schemaPath) {
 // GitHub / fixture loaders
 // ---------------------------------------------------------------------------
 
-async function githubFetch(url, token) {
+export async function githubFetch(url, token) {
 	const res = await fetch(url, {
 		headers: {
 			"user-agent": "kaelys-js-sync-catalog",
@@ -146,7 +146,7 @@ async function githubFetch(url, token) {
 	return res.json();
 }
 
-async function fetchCatalogFromGitHub(owner, name, token) {
+export async function fetchCatalogFromGitHub(owner, name, token) {
 	const url = `https://api.github.com/repos/${owner}/${name}/contents/.github/kaelys-catalog.json`;
 	const body = await githubFetch(url, token);
 	if (body.encoding !== "base64" || typeof body.content !== "string") {
@@ -155,7 +155,7 @@ async function fetchCatalogFromGitHub(owner, name, token) {
 	return JSON.parse(Buffer.from(body.content, "base64").toString("utf8"));
 }
 
-async function fetchMetadataFromGitHub(owner, name, token) {
+export async function fetchMetadataFromGitHub(owner, name, token) {
 	const repo = await githubFetch(`https://api.github.com/repos/${owner}/${name}`, token);
 	return {
 		description: repo.description || null,
@@ -167,7 +167,7 @@ async function fetchMetadataFromGitHub(owner, name, token) {
 	};
 }
 
-async function loadFromFixtures(dir, owner, name) {
+export async function loadFromFixtures(dir, owner, name) {
 	const catalog = JSON.parse(await readFile(join(dir, `${name}-catalog.json`), "utf8"));
 	const metadata = JSON.parse(await readFile(join(dir, `${name}-metadata.json`), "utf8"));
 	return { catalog, metadata };
@@ -177,7 +177,7 @@ async function loadFromFixtures(dir, owner, name) {
 // Rendering
 // ---------------------------------------------------------------------------
 
-const STATUS_BADGE = {
+export const STATUS_BADGE = {
 	stable: "stable",
 	beta: "beta",
 	alpha: "alpha",
@@ -191,11 +191,13 @@ const STATUS_BADGE = {
  *   - fields in a fixed order per repo
  *   - no timestamps
  */
-function renderBlock(owner, entries) {
+export function renderBlock(owner, entries) {
 	const lines = [];
 	lines.push(BEGIN_MARKER);
 	lines.push("");
-	lines.push("<!-- Regenerated by scripts/sync-catalog.mjs; do not hand-edit inside these markers. -->");
+	lines.push(
+		"<!-- Regenerated by scripts/sync-catalog.mjs; do not hand-edit inside these markers. -->",
+	);
 	lines.push("");
 	for (const { catalog, metadata } of entries) {
 		lines.push(...renderRepoCard(owner, catalog, metadata));
@@ -205,14 +207,12 @@ function renderBlock(owner, entries) {
 	return lines.join("\n");
 }
 
-function renderRepoCard(owner, catalog, metadata) {
+export function renderRepoCard(owner, catalog, metadata) {
 	const name = catalog.name;
 	const url = metadata.htmlUrl || `https://github.com/${owner}/${name}`;
 	const status = STATUS_BADGE[catalog.status] || catalog.status;
 	const primaryLanguage = catalog.primaryLanguage || metadata.primaryLanguage || null;
-	const topics = (catalog.topics && catalog.topics.length > 0)
-		? catalog.topics
-		: metadata.topics;
+	const topics = catalog.topics && catalog.topics.length > 0 ? catalog.topics : metadata.topics;
 	const lines = [];
 
 	lines.push(`### [${name}](${url})  \`${status}\``);
@@ -272,18 +272,20 @@ function renderRepoCard(owner, catalog, metadata) {
 }
 
 /** Prevent stray Markdown tokens in prose from breaking the render. */
-function escapeInline(s) {
+export function escapeInline(s) {
 	// Only strip control characters + normalise CRLF → LF. We deliberately
 	// preserve markdown-meaningful punctuation (backticks, brackets, *) because
 	// authors legitimately want emphasis in taglines/sellMe.
-	return String(s).replace(/\r\n?/g, "\n").replace(/[ --]/g, "");
+	return String(s)
+		.replace(/\r\n?/g, "\n")
+		.replace(/[ --]/g, "");
 }
 
 // ---------------------------------------------------------------------------
 // README rewrite
 // ---------------------------------------------------------------------------
 
-function replaceBlock(readme, newBlock) {
+export function replaceBlock(readme, newBlock) {
 	const begin = readme.indexOf(BEGIN_MARKER);
 	const end = readme.indexOf(END_MARKER);
 	if (begin === -1 || end === -1 || end < begin) {
@@ -300,7 +302,7 @@ function replaceBlock(readme, newBlock) {
 // Schema-check-only walker
 // ---------------------------------------------------------------------------
 
-async function runSchemaCheckOnly({ reposRoot, schemaPath, reposConfigPath }) {
+export async function runSchemaCheckOnly({ reposRoot, schemaPath, reposConfigPath }) {
 	const assertValid = await loadValidator(schemaPath);
 	const root = reposRoot || resolve(REPO_ROOT, "..");
 
@@ -334,7 +336,7 @@ async function runSchemaCheckOnly({ reposRoot, schemaPath, reposConfigPath }) {
 // Main
 // ---------------------------------------------------------------------------
 
-async function main() {
+export async function main() {
 	const args = parseArgs(process.argv);
 
 	if (args.schemaCheckOnly) {
@@ -395,8 +397,17 @@ async function main() {
 	process.stdout.write(`sync-catalog: rewrote README.md (${entries.length} repo(s)).\n`);
 }
 
-main().catch((err) => {
-	process.stderr.write(`sync-catalog: ${err.message}\n`);
-	if (process.env.DEBUG) process.stderr.write(`${err.stack}\n`);
-	process.exit(1);
-});
+// Only run when invoked directly (not on import). Guarded so vitest can
+// import + exercise every function without triggering the top-level main().
+// c8 ignore next 6 — the guard + main-catch wrapper is process bootstrap:
+// unit-testable behavior lives inside main() itself (tested via mocks) and
+// running the whole script via subprocess is the integration tests' job.
+/* c8 ignore start */
+if (import.meta.url === `file://${process.argv[1]}`) {
+	main().catch((err) => {
+		process.stderr.write(`sync-catalog: ${err.message}\n`);
+		if (process.env.DEBUG) process.stderr.write(`${err.stack}\n`);
+		process.exit(1);
+	});
+}
+/* c8 ignore stop */

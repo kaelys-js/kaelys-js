@@ -13,7 +13,7 @@ trim_trailing_whitespace = true
 max_line_length = 100
 
 # YAML (tabs are invalid per YAML spec)
-[*.{yml,yaml}]
+[{*.{yml,yaml},.yamllint}]
 indent_style = space
 indent_size = 2
 
@@ -28,6 +28,43 @@ space_redirects = true
 # Markdown (trailing whitespace = line breaks)
 [*.{md,mdx}]
 trim_trailing_whitespace = false
+max_line_length = off
+
+# JSON / JSON5 (schemas, fixtures, config often have long strings that can't
+# be safely broken — Renovate configs, JSON-Schema $ids, catalog descriptions).
+[*.{json,jsonc,json5}]
+max_line_length = off
+
+# Renovate configs are canonically-formatted; long extends[] and matchStrings
+# lines are unavoidable.
+[renovate.{json,json5}]
+max_line_length = off
+
+# GitHub Actions workflows — SHA-pinned `uses:` lines are ~85–100 chars once
+# indent + tag comment are counted; oxfmt already gates layout.
+[.github/workflows/*.{yml,yaml}]
+max_line_length = off
+
+# Lefthook config — schema URLs + run commands on one line by convention.
+[lefthook.yml]
+max_line_length = off
+
+# The sync-catalog script has commentary + template strings that don't fit
+# in 100 cols and reformatting them harms readability. oxfmt owns layout.
+[scripts/*.mjs]
+max_line_length = off
+
+# Vitest + integration tests use long template strings + JSON literals that
+# can't be broken without harming test intent.
+[tests/**]
+max_line_length = off
+
+# package.json's description/scripts naturally exceed 100 chars.
+[package.json]
+max_line_length = off
+
+# Markdown-lint config uses long URLs.
+[.markdownlint-cli2.jsonc]
 max_line_length = off
 
 # Lock files — don't reformat

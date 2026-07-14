@@ -28,29 +28,23 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
 
       # jdx/mise-action installs mise + every tool pinned in mise.toml
       # (node, pnpm, oxlint, oxfmt, yamllint, yq, markdownlint-cli2, gitleaks).
       - name: Install mise + pinned toolchain
-        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d  # v4.2.0
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
 
       - name: Install workspace deps
         run: pnpm install --frozen-lockfile
 
-      - name: Lint (oxlint)
-        run: pnpm lint
+      - name: Full qa lint (oxlint + yamllint + markdown + gitleaks + editorconfig + taplo)
+        run: pnpm qa:lint
 
-      - name: Lint YAML
-        run: pnpm lint:yaml
-
-      - name: Lint Markdown
-        run: pnpm lint:markdown
-
-      - name: Secret scan (gitleaks)
-        run: pnpm lint:secrets
+      - name: Format check (oxfmt + taplo)
+        run: pnpm qa:format:check
 
       # Walks every catalog file we can see — this repo's fixtures + any
       # sibling checkout under --repos-root — and validates against the schema.
@@ -58,5 +52,15 @@ jobs:
       - name: Validate every committed catalog file against the schema
         run: pnpm validate:schema
 
-      - name: Tests (node --test)
-        run: pnpm test
+      # Coverage gate: vitest.config.mjs sets perFile thresholds of 90 on
+      # lines/functions/branches/statements. The gate is vitest's own exit code.
+      - name: Tests + coverage (vitest, ≥90% per file)
+        run: pnpm qa:test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-v8
+          path: coverage/
+          retention-days: 7

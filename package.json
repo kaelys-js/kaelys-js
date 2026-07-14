@@ -2,26 +2,49 @@
 	"name": "kaelys-js-profile",
 	"version": "0.0.0",
 	"private": true,
-	"type": "module",
 	"description": "kaelys-js GitHub org profile README + cross-repo catalog aggregator.",
 	"license": "MIT",
-	"engines": {
-		"node": ">=26.4.0",
-		"pnpm": ">=11.10.0"
-	},
-	"packageManager": "pnpm@11.12.0",
+	"type": "module",
 	"scripts": {
 		"lint": "oxlint",
 		"lint:secrets": "gitleaks dir --no-banner --redact --exit-code 1 .",
 		"lint:yaml": "yamllint -s .",
 		"lint:markdown": "markdownlint-cli2 '**/*.md' '#node_modules'",
-		"test": "node --test 'tests/**/*.test.mjs'",
+		"lint:editorconfig": "ec -exclude 'node_modules|\\.mise|coverage|pnpm-lock\\.yaml|mise\\.lock|\\.md$|scripts/sync-catalog\\.mjs'",
+		"lint:toml": "taplo lint",
+		"lint:commit": "commitlint --edit",
+		"format": "pnpm format:oxfmt && pnpm format:toml",
+		"format:check": "pnpm format:check:oxfmt && pnpm format:check:toml",
+		"format:oxfmt": "oxfmt .",
+		"format:check:oxfmt": "oxfmt --check .",
+		"format:toml": "taplo format",
+		"format:check:toml": "taplo format --check",
+		"qa:lint": "pnpm lint && pnpm lint:yaml && pnpm lint:markdown && pnpm lint:secrets && pnpm lint:editorconfig && pnpm lint:toml",
+		"qa:format": "pnpm format",
+		"qa:format:check": "pnpm format:check",
+		"qa:test": "vitest run",
+		"qa:test:coverage": "vitest run --coverage",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
 		"sync": "node scripts/sync-catalog.mjs",
 		"sync:check": "node scripts/sync-catalog.mjs --check",
-		"validate:schema": "node scripts/sync-catalog.mjs --schema-check-only"
+		"validate:schema": "node scripts/sync-catalog.mjs --schema-check-only",
+		"prepare": "lefthook install"
 	},
 	"dependencies": {
 		"ajv": "8.20.0",
 		"ajv-formats": "3.0.1"
-	}
+	},
+	"devDependencies": {
+		"@commitlint/cli": "21.2.0",
+		"@commitlint/config-conventional": "21.2.0",
+		"@vitest/coverage-v8": "4.1.9",
+		"lefthook": "2.1.9",
+		"vitest": "4.1.9"
+	},
+	"engines": {
+		"node": ">=26.4.0",
+		"pnpm": ">=11.10.0"
+	},
+	"packageManager": "pnpm@11.12.0"
 }
