@@ -1,0 +1,126 @@
+{
+	// Self-hosted Renovate config for kaelys-js/kaelys-js — the org profile
+	// README repo. Scope: npm workspace deps (ajv + ajv-formats + linters
+	// pulled through pnpm) + GitHub Actions pinned in .github/workflows/*.
+	//
+	// mise-managed tools (node, pnpm, yq, gitleaks, yamllint, markdownlint-cli2,
+	// oxlint, oxfmt) are pinned in mise.toml and out of scope here — we bump
+	// them in lockstep with stardust's mise.toml manually. Container images
+	// are not used in this repo, so no dockerfile/custom.regex manager.
+	//
+	// 1. npm/pnpm deps. The built-in `npm` manager reads package.json +
+	//    pnpm-lock.yaml. patch/minor/digest auto-merge after CI; major is a
+	//    review PR. lockFileMaintenance refreshes the lock.
+	//
+	// 2. GitHub Actions. The built-in `github-actions` manager reads every
+	//    `uses:` line in .github/workflows/*.yml. Same policy as npm:
+	//    patch/minor/digest auto-merge, major review PR.
+	//
+	// Every Renovate commit is `chore(deps): …`. This repo has no commitlint
+	// today, but the message format matches stardust's so a future commitlint
+	// adoption doesn't churn Renovate.
+	$schema: "https://docs.renovatebot.com/renovate-schema.json",
+
+	extends: [
+		"config:recommended",
+		":dependencyDashboard",
+		":semanticCommits",
+	],
+
+	timezone: "America/Vancouver",
+
+	// Same overnight window as stardust so both repos' bots stay off the day.
+	schedule: ["* 0-5 * * *"],
+
+	dependencyDashboard: true,
+
+	// --- Commit / PR message shape -------------------------------------------
+	// Format matches stardust's Renovate: `chore(deps): update <pkg> to <ver>`.
+	// This repo has no commitlint config today, but keeping the shape identical
+	// means adopting commitlint later is a no-op for Renovate PRs.
+	semanticCommits: "enabled",
+	semanticCommitType: "chore",
+	semanticCommitScope: "deps",
+	commitMessagePrefix: "chore(deps):",
+
+	// --- DCO signoff -----------------------------------------------------------
+	// This repo doesn't have probot/dco installed today, but stardust does, and
+	// we use the same GitHub App identity across the org. Injecting the trailer
+	// here keeps every kaelys-js-renovate[bot] commit consistent — no repo has
+	// to know whether DCO is on to render a clean commit.
+	commitBody: "Signed-off-by: kaelys-js-renovate[bot] <304942767+kaelys-js-renovate[bot]@users.noreply.github.com>",
+
+	// --- Concurrency / noise control -----------------------------------------
+	prConcurrentLimit: 4,
+	prHourlyLimit: 2,
+	rebaseWhen: "behind-base-branch",
+
+	// Cool-down: never auto-merge a release younger than this. Guards against
+	// a compromised/yanked just-published version landing hands-off.
+	minimumReleaseAge: "3 days",
+
+	// Enabled managers:
+	//   - npm             -> package.json + pnpm-lock.yaml
+	//   - github-actions  -> .github/workflows/*.yml `uses:` lines
+	// Everything else stays off — mise, dockerfile, custom.regex don't apply here.
+	enabledManagers: ["npm", "github-actions"],
+
+	// Keep pnpm-lock.yaml fresh (dedupe / transitive security bumps) via a
+	// scheduled lockfile-only PR. Auto-merged after CI (see packageRules).
+	lockFileMaintenance: {
+		enabled: true,
+		automerge: true,
+		platformAutomerge: true,
+	},
+
+	// --- packageRules --------------------------------------------------------
+	// Automerge matrix (all automerges gated on green CI + minimumReleaseAge):
+	//   npm             patch/minor/digest      -> automerge (grouped)
+	//   npm             major                   -> review PR (never grouped)
+	//   github-actions  patch/minor/digest      -> automerge (grouped)
+	//   github-actions  major                   -> review PR (never grouped)
+	//   lockFileMaintenance                     -> automerge (configured above)
+	packageRules: [
+		// ── npm / pnpm workspace deps ────────────────────────────────────────
+		{
+			// patch/minor/digest are non-breaking by semver; CI (lint + schema +
+			// node --test) fully validates JS deps, so auto-merge after green CI.
+			matchManagers: ["npm"],
+			matchUpdateTypes: ["patch", "minor", "digest"],
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: true,
+			groupName: "npm dev dependencies (non-major)",
+			commitMessageTopic: "npm dev dependencies",
+		},
+		{
+			// Major npm bumps can break; review PR, its own PR (never grouped).
+			matchManagers: ["npm"],
+			matchUpdateTypes: ["major"],
+			automerge: false,
+			groupName: null,
+		},
+
+		// ── GitHub Actions ───────────────────────────────────────────────────
+		{
+			// patch/minor/digest bumps for the workflow `uses:` pins auto-merge
+			// after green CI. Grouped so a single actions/checkout or mise-action
+			// bump lands as one PR across every workflow.
+			matchManagers: ["github-actions"],
+			matchUpdateTypes: ["patch", "minor", "digest"],
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: true,
+			groupName: "github actions (non-major)",
+			commitMessageTopic: "github actions",
+		},
+		{
+			// Major action bumps (e.g. actions/checkout v4 -> v5) can change
+			// input names; review PR, its own PR (never grouped).
+			matchManagers: ["github-actions"],
+			matchUpdateTypes: ["major"],
+			automerge: false,
+			groupName: null,
+		},
+	],
+}
