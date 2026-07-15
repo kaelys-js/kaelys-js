@@ -65,9 +65,41 @@
 
 	// Enabled managers:
 	//   - npm             -> package.json + pnpm-lock.yaml
+	//   - custom.regex    -> mise.toml `node = "..."` + `pnpm = "..."` lines,
+	//                       matched with depName == the npm engines depName so
+	//                       Renovate groups mise.toml + package.json engines
+	//                       into ONE PR (bump-together). Every OTHER tool in
+	//                       mise.toml is still bumped in lockstep with stardust
+	//                       manually — only node + pnpm are automated here.
 	//   - github-actions  -> .github/workflows/*.yml `uses:` lines
-	// Everything else stays off — mise, dockerfile, custom.regex don't apply here.
-	enabledManagers: ["npm", "github-actions"],
+	// Everything else stays off — dockerfile doesn't apply here.
+	enabledManagers: ["npm", "custom.regex", "github-actions"],
+
+	// --- customManager: mise.toml node + pnpm (bump-together) ----------------
+	// See foundation-registry/renovate.json5 for the design rationale. The npm
+	// engines depName MUST match `node` / `pnpm` for the group rule below to
+	// merge mise.toml + package.json engines into one PR.
+	customManagers: [
+		{
+			customType: "regex",
+			managerFilePatterns: ["/^mise\\.toml$/"],
+			matchStrings: ["^node\\s*=\\s*\"(?<currentValue>[^\"]+)\""],
+			depNameTemplate: "node",
+			packageNameTemplate: "nodejs/node",
+			datasourceTemplate: "github-releases",
+			versioningTemplate: "node",
+			extractVersionTemplate: "^v(?<version>.+)$",
+		},
+		{
+			customType: "regex",
+			managerFilePatterns: ["/^mise\\.toml$/"],
+			matchStrings: ["^pnpm\\s*=\\s*\"(?<currentValue>[^\"]+)\""],
+			depNameTemplate: "pnpm",
+			packageNameTemplate: "pnpm",
+			datasourceTemplate: "npm",
+			versioningTemplate: "npm",
+		},
+	],
 
 	// Keep pnpm-lock.yaml fresh (dedupe / transitive security bumps) via a
 	// scheduled lockfile-only PR. Auto-merged after CI (see packageRules).
@@ -85,6 +117,29 @@
 	//   github-actions  major                   -> review PR (never grouped)
 	//   lockFileMaintenance                     -> automerge (configured above)
 	packageRules: [
+		// ── node + pnpm bump-together (mise.toml + package.json engines) ────
+		{
+			// Group mise.toml (custom.regex) + package.json engines (npm) into
+			// ONE PR per bump. patch/minor auto-merges (CI validates both
+			// files together).
+			matchDepNames: ["node", "pnpm"],
+			matchManagers: ["custom.regex", "npm"],
+			groupName: "node + pnpm toolchain",
+			commitMessageTopic: "node + pnpm toolchain",
+			matchUpdateTypes: ["patch", "minor", "digest"],
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: true,
+		},
+		{
+			// Major bumps of node/pnpm are a human decision; review PR.
+			matchDepNames: ["node", "pnpm"],
+			matchManagers: ["custom.regex", "npm"],
+			matchUpdateTypes: ["major"],
+			groupName: "node + pnpm toolchain",
+			automerge: false,
+		},
+
 		// ── npm / pnpm workspace deps ────────────────────────────────────────
 		{
 			// patch/minor/digest are non-breaking by semver; CI (lint + schema +
