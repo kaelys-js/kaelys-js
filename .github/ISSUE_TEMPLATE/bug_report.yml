@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+# Managed by kaelys-js-infra (terraform/repository_files.tf).
+name: Bug report
+description: Report an issue with the kaelys-js org profile / catalog rendering
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report a bug with the kaelys-js README aggregator or the shared
+        `.github/kaelys-catalog.json` schema.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Org profile README rendering
+        - kaelys-catalog schema
+        - scripts/sync-catalog.mjs (sync)
+        - GitHub App permissions / catalog dispatch
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: target-repo
+    attributes:
+      label: Target repo (if a catalog file caused this)
+      description: "kaelys-js/<name> — the repo whose `.github/kaelys-catalog.json` triggered the bug"
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      placeholder: Describe the observed bug + steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs (Actions run URL, console output)
+      render: shell
+    validations:
+      required: false
