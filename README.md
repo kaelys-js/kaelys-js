@@ -126,6 +126,25 @@ Claude Desktop only signs in to one Anthropic account at a time — switching me
 
 [homepage](https://github.com/kaelys-js/claude-multiacct) · [issues](https://github.com/kaelys-js/claude-multiacct/issues) · [discussions](https://github.com/kaelys-js/claude-multiacct/discussions)
 
+### [kaelys-js-infra](https://github.com/kaelys-js/kaelys-js-infra) `stable`
+
+_Terraform-managed GitHub IaC for the kaelys-js fleet — repos, branch protection, rulesets, actions, dependency policy, fleet .github/\*._
+
+Single source of truth for every settable GitHub attribute across every kaelys-js repo. `modules/managed_repo` covers the full `github_repository` surface (visibility, branch protection with 2026 best practices, security_analysis, actions permissions, environments, webhooks, files, rulesets); `archived_repo`, `repository_files`, `ruleset`, `actions_settings`, `security_analysis`, `webhook`, `environment` are separate reusable modules. `var.is_paid_plan` gates every private-repo Pro feature so a foreign-org fork just flips `terraform.tfvars`.
+
+<dl>
+<dt>Since</dt><dd>2026</dd>
+<dt>Language</dt><dd>HCL</dd>
+<dt>Visibility</dt><dd>private</dd>
+<dt>License</dt><dd>MIT</dd>
+<dt>Stack</dt><dd>Terraform, GitHub Actions, mise, renovate</dd>
+<dt>Topics</dt><dd>`terraform` `iac` `github-provider` `renovate`</dd>
+</dl>
+
+**Products**
+
+- `iac` — Root module + 8 reusable sub-modules under `modules/`. Applied via `.github/workflows/terraform.yml` on push-to-main; the workflow's post-apply gate uses `terraform plan -detailed-exitcode` to break state-refresh commit loops.
+
 <!-- catalog:end -->
 
 ## Reach us
