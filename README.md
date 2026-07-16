@@ -20,6 +20,8 @@
 
 <sub>Local-first · privacy-respecting · built with care.</sub>
 
+[![CI](https://github.com/kaelys-js/kaelys-js/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kaelys-js/kaelys-js/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Sponsor](https://img.shields.io/github/sponsors/kaelys-js?label=sponsor&logo=githubsponsors&logoColor=white&color=ea4aaa)](https://github.com/sponsors/kaelys-js)
 [![Followers](https://img.shields.io/github/followers/kaelys-js?label=follow&style=social)](https://github.com/kaelys-js)
 
@@ -33,10 +35,9 @@
 
 **resist.js** is a local-first software company. We build applications that run
 on your device, keep your data yours, and work whether or not the network does.
-
-The monorepo stays private while products are in development — expect it to open
-up as they mature. In the meantime, this profile is where we say what we stand
-for.
+The monorepo stays private while products are in development — expect it to
+open up as they mature. In the meantime, this profile is where we say what we
+stand for.
 
 ## How we work
 
@@ -46,6 +47,24 @@ for.
   telemetry-by-surprise, no quiet exfiltration.
 - **Craft** — small surface area, honest defaults, and software that ages well.
   We ship what we would want to run ourselves.
+
+## About this repo
+
+This repo hosts the `kaelys-js` GitHub org profile README (this file) and the
+Node script that regenerates its `<!-- catalog:begin -->` block from sibling
+repos. `scripts/sync-catalog.mjs` fetches every listed repo's
+`.github/kaelys-catalog.json`, validates it against
+`schema/kaelys-catalog.schema.json`, and rewrites the block. It runs on a
+daily cron, on manual dispatch, and on `repository_dispatch` from each target
+repo's `catalog-notify.yml`. See [docs/catalog-setup.md](docs/catalog-setup.md)
+for the one-time GitHub App setup.
+
+Local gates (see [CONTRIBUTING.md](CONTRIBUTING.md) for the full flow):
+
+```sh
+mise install
+pnpm qa:lint && pnpm qa:format:check
+```
 
 ## Projects
 
@@ -151,3 +170,14 @@ Single source of truth for every settable GitHub attribute across every kaelys-j
 
 - **GitHub** — [github.com/kaelys-js](https://github.com/kaelys-js)
 - **GitHub Sponsors** — [github.com/sponsors/kaelys-js](https://github.com/sponsors/kaelys-js)
+
+## Support + Security
+
+- Bug reports: [Issues](https://github.com/kaelys-js/kaelys-js/issues)
+- Questions: [Discussions](https://github.com/kaelys-js/kaelys-js/discussions)
+- Security: [SECURITY.md](SECURITY.md) (private vulnerability reporting)
+- Conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## License
+
+[MIT](LICENSE) © kaelys-js
