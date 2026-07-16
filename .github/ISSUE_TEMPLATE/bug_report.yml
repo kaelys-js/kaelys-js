@@ -26,7 +26,9 @@ body:
     id: target-repo
     attributes:
       label: Target repo (if a catalog file caused this)
-      description: "kaelys-js/<name> — the repo whose `.github/kaelys-catalog.json` triggered the bug"
+      description: >
+        kaelys-js/<name> — the repo whose
+        `.github/kaelys-catalog.json` triggered the bug
     validations:
       required: false
   - type: textarea
