@@ -65,7 +65,6 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: |
             kaelys-js
-            kaelys-js-infra
             stardust
             foundation-registry
             claude-multiacct
