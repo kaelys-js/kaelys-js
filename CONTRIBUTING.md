@@ -1,34 +1,90 @@
 # Contributing to kaelys-js
 
-Thanks for considering a contribution. This repo hosts the `kaelys-js`
-GitHub org profile README and the machinery that regenerates its
-`<!-- catalog:begin -->` block from sibling repos.
+Thanks for your interest. This document covers the local setup, expected
+workflow, and quality bar for changes to this repo.
 
-## Engineering rules
+## Prerequisites
 
-Every code change follows the 13 rules in [AGENTS.md](AGENTS.md). Rule 13
-is the load-bearing one: approved work ships fully, no scope narrowed
-silently.
+- macOS or Linux (Windows-via-WSL untested)
+- Node 26.5.0 — pinned via `mise.toml` (auto-installs via `mise install`)
+- pnpm 11.12.0
+- `git` with SSH signing configured (see [AGENTS.md](AGENTS.md))
 
-## Pull request flow
-
-- Open a PR against `main`. Fill out the template (Summary / Test plan /
-  Rule 13 checkboxes).
-- Match the [`kaelys-catalog`](https://github.com/kaelys-js/kaelys-js#kaelys-catalog-schema)
-  schema if you touch `.github/kaelys-catalog.json` or the
-  `scripts/sync-catalog.mjs` generator — the CI `schema` check fails
-  otherwise.
-- CI runs `lint + schema + test` on every PR. The gate is required for
-  merge; fix in-branch rather than opening follow-on PRs.
-
-## Local gates before you push
+## Setup
 
 ```sh
-pnpm qa:lint
-pnpm qa:format:check
+git clone https://github.com/kaelys-js/kaelys-js ~/wherever/kaelys-js
+cd ~/wherever/kaelys-js
+mise install          # pins toolchain from mise.toml
+pnpm install --frozen-lockfile
 ```
 
-## Reporting security issues
+## Local gates (must pass before pushing)
 
-Do NOT open a public issue for anything security-adjacent — see
-[SECURITY.md](SECURITY.md) for the private-vulnerability-reporting path.
+```sh
+pnpm qa:lint && pnpm qa:format:check
+```
+
+CI runs the same gates — locally-green + pushed = CI-green.
+
+## Development workflow
+
+1. Branch from `main`: `git checkout -b type/short-description`
+2. Commit with signoff: `git commit -s -m "type(scope): summary"` (conventional commits)
+3. Push: `git push -u origin HEAD`
+4. Open PR — GitHub picks up `.github/PULL_REQUEST_TEMPLATE.md` automatically
+5. Wait for CI + review approval before merge
+
+## Pull request checklist
+
+Every PR must satisfy:
+
+- [ ] Local gates green (see above)
+- [ ] Commits signed (`git commit -s` — DCO gate blocks unsigned commits on merge)
+- [ ] PR title follows conventional commits (`type(scope): summary`)
+- [ ] Every changed line traces to the PR description
+- [ ] No forbidden vocabulary — see the Rule 13 list below
+- [ ] Every approved item shipped in full — no scope narrowed silently
+- [ ] Tests verify INTENT (Rule 9), not just behaviour
+
+## Rule 13 — no forbidden vocabulary
+
+These words are Rule 13 forbidden — enforced in code review and by the
+fleet `no-deflect` commit-msg gate in the
+[kaelys-js/general](https://github.com/kaelys-js/general) meta-repo
+(`.githooks/commit-msg` + `scripts/system/verify-no-deflection.mjs`):
+
+`defer`, `follow-up`, `follow-on`, `MVP`, `for now`, `future PR`, `future work`, `out of scope`, `won't fit`, `separate PR`, `separate ticket`, `simplify to`, `punt`, `leave for now`, `will do next`, `later`, `tracked separately`
+
+If you genuinely can't ship approved work in the current PR, surface the
+blocker + ask; do not narrow scope silently.
+
+## Code review
+
+- All PRs need at least 1 approving review (fleet policy via branch protection)
+- CODEOWNERS (`* @kaelys-js`) is auto-added as a reviewer
+- Stale approvals dismiss on new pushes
+- Last-push approval required (an approval must come after the final commit)
+
+## Getting help
+
+- Bug reports: [Issues](https://github.com/kaelys-js/kaelys-js/issues)
+- Questions / ideas: [Discussions](https://github.com/kaelys-js/kaelys-js/discussions)
+- Security: see [SECURITY.md](SECURITY.md) — do NOT file security bugs as public issues
+- Conduct: see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## Response SLA
+
+Solo maintainer, best-effort. Non-security PRs: ~1-3 business days.
+Security reports: 24-48 hours via GitHub's private vulnerability reporting.
+
+## License
+
+Contributions are licensed under the repo's existing LICENSE ([MIT](LICENSE)).
+
+## The 13 rules
+
+Every change follows the 13 rules in [AGENTS.md](AGENTS.md). Rule 3
+(surgical), Rule 9 (tests verify intent), Rule 12 (fail loud), and Rule
+13 (approved work ships fully) are the most-frequently-invoked in
+review. Read AGENTS.md before your first PR.
