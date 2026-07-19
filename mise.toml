@@ -24,7 +24,7 @@ MISE_INSTALLS_DIR = "{{config_root}}/.mise/installs"
 # Node — matches stardust (26.5.0, latest).
 node = "26.5.0"
 # pnpm — matches stardust.
-pnpm = "11.12.0"
+pnpm = "11.13.1"
 
 # ── ts/js lint + format ──────────────────────────────────────────────
 "npm:oxlint" = "1.73.0"
