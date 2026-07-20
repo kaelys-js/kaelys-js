@@ -138,6 +138,19 @@
 	//   github-actions  major                   -> review PR (never grouped)
 	//   lockFileMaintenance                     -> automerge (configured above)
 	packageRules: [
+		// ── PIN jdx/mise-action to <4.2.1 ────────────────────────────────────
+		// v4.2.1 (release notes: PATH-export fix + minisign checksum verify)
+		// regressed the pnpm shim: on this repo's CI, `pnpm install
+		// --frozen-lockfile` immediately after `jdx/mise-action@v4.2.1` fails
+		// with `mise ERROR pnpm is not a valid shim`. v4.2.0 works. Pin here
+		// (and in kaelys-js-infra + ttt-studio + stardust) until an upstream
+		// fix lands or repro reduction is filed against jdx/mise-action.
+		{
+			matchPackageNames: ["jdx/mise-action"],
+			allowedVersions: "<4.2.1",
+			description: "v4.2.1 broke pnpm shim resolution on our runners — pin to v4.2.0 until upstream fix",
+		},
+
 		// ── node + pnpm bump-together (mise.toml + package.json engines) ────
 		{
 			// Group mise.toml (custom.regex) + package.json engines (npm) into
