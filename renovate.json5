@@ -82,7 +82,7 @@
 
 	// Cool-down: never auto-merge a release younger than this. Guards against
 	// a compromised/yanked just-published version landing hands-off.
-	minimumReleaseAge: "3 days",
+	minimumReleaseAge: "7 days",
 
 	// Enabled managers:
 	//   - npm             -> package.json + pnpm-lock.yaml
@@ -169,7 +169,10 @@
 			matchManagers: ["custom.regex", "npm"],
 			matchUpdateTypes: ["major"],
 			groupName: "node + pnpm toolchain",
-			automerge: false,
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: false,
+			minimumReleaseAge: "21 days",
 		},
 
 		// ── npm / pnpm workspace deps ────────────────────────────────────────
@@ -188,8 +191,10 @@
 			// Major npm bumps can break; review PR, its own PR (never grouped).
 			matchManagers: ["npm"],
 			matchUpdateTypes: ["major"],
-			automerge: false,
-			groupName: null,
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: false,
+			minimumReleaseAge: "21 days",
 		},
 
 		// ── GitHub Actions ───────────────────────────────────────────────────
@@ -210,8 +215,10 @@
 			// input names; review PR, its own PR (never grouped).
 			matchManagers: ["github-actions"],
 			matchUpdateTypes: ["major"],
-			automerge: false,
-			groupName: null,
+			automerge: true,
+			automergeType: "pr",
+			platformAutomerge: false,
+			minimumReleaseAge: "21 days",
 		},
 	],
 }
