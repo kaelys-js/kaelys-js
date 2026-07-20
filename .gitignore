@@ -58,3 +58,6 @@ temp/
 .tmp/
 .temp/
 *.local
+
+# local `act` wrapper artifacts (secrets file, log tmp)
+.act/
