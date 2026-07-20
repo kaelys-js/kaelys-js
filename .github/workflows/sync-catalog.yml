@@ -13,6 +13,11 @@ name: sync-catalog
     # 06:00 UTC daily — an hour after most upstream repos' overnight CI wraps.
     - cron: "0 6 * * *"
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Skip commit + push; log what would have happened. Used by kaelys-js-infra/scripts/audit-scheduled.sh via `act workflow_dispatch --input dry_run=true`."
+        type: boolean
+        default: false
   repository_dispatch:
     types: [catalog-updated]
 
@@ -22,6 +27,12 @@ concurrency:
 
 permissions:
   contents: read
+
+env:
+  # `inputs.dry_run` is only set on workflow_dispatch; schedule + repo_dispatch
+  # leave it empty and behave as before. Explicit string compare against
+  # 'true' below so schedule paths always take the mutating branch.
+  DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
 
 jobs:
   sync:
@@ -101,6 +112,12 @@ jobs:
         run: |
           if [[ -z "$(git status --porcelain -- README.md)" ]]; then
             echo "sync-catalog: README unchanged — nothing to commit."
+            exit 0
+          fi
+          if [[ "${DRY_RUN}" == "true" ]]; then
+            echo "[DRY_RUN] would commit + push README drift as ${BOT_NAME}:"
+            git --no-pager diff --stat -- README.md
+            git --no-pager diff -- README.md | head -60
             exit 0
           fi
           git config user.name "$BOT_NAME"
