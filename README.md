@@ -57,33 +57,33 @@ Node script that regenerates its `<!-- catalog:begin -->
 
 ### [stardust](https://github.com/kaelys-js/stardust) `wip`
 
-_Home for every personal project, sharing one toolchain and one release pipeline._
+_Personal and homelab projects in one monorepo._
 
-Personal projects fragment across dozens of repos, each with their own lint, format, test, and deploy config. Stardust pulls them into one pnpm workspace under a single mise-managed toolchain and one Turbo pipeline. New work lands as packages under `packages/**`; existing repos migrate in one at a time. Renovate keeps container images, npm deps, and toolchain pins fresh under one auto-merge policy.
+One workspace for a set of small self-hosted services and tools, from DNS ad-blocking to a media stack to VPN exit nodes, so they share one toolchain, one set of checks, and one update policy instead of drifting across separate repos. Projects move in one at a time.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
 <dt>Language</dt><dd>TypeScript</dd>
 <dt>Visibility</dt><dd>private</dd>
 <dt>License</dt><dd>MIT</dd>
-<dt>Stack</dt><dd>TypeScript, pnpm, Turbo, mise, Docker, valibot</dd>
-<dt>Topics</dt><dd>`monorepo` `self-hosted` `homelab` `container-orchestration`</dd>
+<dt>Stack</dt><dd>TypeScript, pnpm, Turbo, mise, Docker, WireGuard</dd>
+<dt>Topics</dt><dd>`monorepo` `pnpm` `turbo` `homelab` `self-hosted` `docker`</dd>
 </dl>
 
 **Products**
 
-- `adguard` — Tailnet-wide DNS ad-blocker, powered by AdGuard Home in a container.
-- `bark` — iOS push server — POST a message, get a native push notification on your phone.
-- `brew` — Homebrew keeper for every Mac — updates formulas and casks on a schedule, then snapshots the Brewfile.
-- `checkrr` — Media-library integrity check that ffprobes every file and tells Sonarr or Radarr to re-grab anything corrupt.
-- `code-mcp` — Keeper for the Claude Code MCP tools (cocoindex, serena) — upgrades, re-indexes, and reaps runaway processes before they OOM the host.
-- `media` — Containerized half of the media stack — request router, captcha bypass, and the loopback helpers around the native *arrs and Plex.
-- `mise` — Keeps the global mise toolchain reproducible across every machine — one upgrade command, one snapshot per host.
-- `tailscale` — Rotates the reusable tailnet auth key so mac disaster-recovery can bring the network back without a human at the keyboard.
-- `vpn-base` — Alpine base image with WireGuard (the VPN tunnel protocol) plus the reconnect and rotate scripts every VPN container reuses.
-- `vpn-exit` — Per-country NordVPN WireGuard exit nodes generated from one registry — opt-in tailnet routing when a device needs a specific country's IP.
-- `vpn-torrent` — Isolated NordVPN WireGuard exit for qBittorrent — fail-closed, never leaks the family's regular exit IP.
-- `watchdog` — Fleet-wide health checker — loops through every product and pushes an iOS notification the moment one flips red.
+- `adguard` — Network-wide DNS ad blocking.
+- `bark` — A self-hosted server for push notifications to your phone.
+- `brew` — Keeps Homebrew packages updated on a schedule.
+- `checkrr` — Finds corrupt files in the media library and re-downloads them.
+- `code-mcp` — Keeps the Claude Code tools installed and healthy.
+- `media` — The self-hosted media stack.
+- `mise` — Keeps the shared toolchain consistent across machines.
+- `tailscale` — Rotates the key used for private-network access.
+- `vpn-base` — The shared base image for the VPN containers.
+- `vpn-exit` — VPN exit nodes, by country.
+- `vpn-torrent` — A locked-down VPN exit dedicated to downloads.
+- `watchdog` — Watches the fleet and alerts on failure.
 
 ### [foundation-registry](https://github.com/kaelys-js/foundation-registry) `wip`
 
@@ -131,9 +131,9 @@ Run more than one Claude subscription without separate apps or signing in and ou
 
 ### [kaelys-js-infra](https://github.com/kaelys-js/kaelys-js-infra) `stable`
 
-_Terraform-managed GitHub IaC for the kaelys-js fleet — repos, branch protection, rulesets, actions, dependency policy, fleet .github/\*._
+_Every GitHub setting across the org, managed as code._
 
-Single source of truth for every settable GitHub attribute across every kaelys-js repo. `modules/managed_repo` covers the full `github_repository` surface (visibility, branch protection with 2026 best practices, security_analysis, actions permissions, environments, webhooks, files, rulesets); `archived_repo`, `repository_files`, `ruleset`, `actions_settings`, `security_analysis`, `webhook`, `environment` are separate reusable modules. `var.is_paid_plan` gates every private-repo Pro feature so a foreign-org fork just flips `terraform.tfvars`.
+One place that defines how every @kaelys-js repository is set up: visibility, branch protection, security settings, actions, and the shared files each repo carries. It's managed in Terraform and applied automatically, so configuration stays consistent and changes go through review instead of the GitHub UI.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
@@ -146,7 +146,7 @@ Single source of truth for every settable GitHub attribute across every kaelys-j
 
 **Products**
 
-- `iac` — Root module + 8 reusable sub-modules under `modules/`. Applied via `.github/workflows/terraform.yml` on push-to-main; the workflow's post-apply gate uses `terraform plan -detailed-exitcode` to break state-refresh commit loops.
+- `iac` — The Terraform modules and the workflow that applies them.
 
 <!-- catalog:end -->
 
