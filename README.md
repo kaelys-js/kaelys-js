@@ -109,9 +109,9 @@ Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody ca
 
 ### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct) `beta`
 
-_Pool several Claude accounts in one Claude Desktop and switch the active login per Code session._
+_Several Claude accounts in one Claude Desktop, switchable per session._
 
-Running more than one Anthropic subscription used to mean cloning Claude.app or re-signing the bundle. This pools every account inside a single Claude Desktop / Claude Code and switches the active login per Code-tab session from a picker mounted next to the model selector. An MV3 extension paints the picker in the Electron renderer, a Bearer-secured loopback daemon holds the account pool, and a CLI shim hot-swaps CLAUDE_CODE_OAUTH_TOKEN between the real claude binary and each session's chosen account. It installs without patching or re-signing the app, applies on launch, and survives Claude updates.
+Run more than one Claude subscription without separate apps or signing in and out. claude-multiacct adds an account picker inside Claude Desktop, so you can add accounts, remove them, and choose which one a session uses. It sets itself up when Claude starts and keeps working after Claude updates.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
@@ -124,10 +124,10 @@ Running more than one Anthropic subscription used to mean cloning Claude.app or 
 
 **Products**
 
-- `cli-shim` — Drop-in `claude` wrapper that resolves the session's chosen account and swaps CLAUDE_CODE_OAUTH_TOKEN before exec'ing the real binary.
-- `watcher` — launchd agent that keeps the shim installed and re-applies it after Claude Desktop updates.
-- `http-bridge` — Loopback HTTP daemon (127.0.0.1, Bearer-secured) that holds the account pool and answers both the picker and the shim.
-- `extension` — MV3 extension injected into the renderer that paints the account picker next to the model selector.
+- `cli-shim` — Runs each session under the account you picked for it.
+- `watcher` — Keeps everything installed and re-applies it after Claude updates.
+- `http-bridge` — A small local service that holds your accounts and answers the picker.
+- `extension` — The account picker that appears inside Claude Desktop.
 
 ### [kaelys-js-infra](https://github.com/kaelys-js/kaelys-js-infra) `stable`
 
