@@ -47,6 +47,8 @@ stand for.
   telemetry-by-surprise, no quiet exfiltration.
 - **Craft** — small surface area, honest defaults, and software that ages well.
   We ship what we would want to run ourselves.
+- **Built as code** — infrastructure, standards, and even our decisions live as
+  code, so what we build stays consistent, reviewable, and quick to change.
 
 ## About this repo
 
