@@ -1,8 +1,8 @@
 {
 	"$schema": "https://raw.githubusercontent.com/kaelys-js/kaelys-js/main/schema/kaelys-catalog.schema.json",
 	"name": "kaelys-js",
-	"tagline": "I turn sprawl into systems.",
-	"sellMe": "I turn sprawl into systems. The infrastructure a team runs on, the standards it holds, and the decisions behind them all live as code, so what people depend on stays consistent, reviewable, and quick to change. I build the tooling and guardrails that let a small team operate like a much larger one, and I hold how the work is run to the same bar as the work itself.",
+	"tagline": "resist.js — local-first software, built with care.",
+	"sellMe": "resist.js builds local-first software: applications that run on your device, keep your data yours, and work with or without the network. We treat infrastructure, standards, and the decisions behind the work as code, so what we ship stays consistent, reviewable, and built to last.",
 	"status": "stable",
 	"since": 2026,
 	"primaryLanguage": "JavaScript",
