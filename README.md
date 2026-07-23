@@ -107,26 +107,27 @@ Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody ca
 - `sync` — Drift guard for generated files — version pins, vendored schemas, Turbo config, and the post-checkout/merge hooks that keep them in step.
 - `registry` — The record spine itself — PRD, PDR, ADR, SPEC, tasks, releases — validated against a JSON Schema and rendered as a browseable index site.
 
-### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct) `stable`
+### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct) `beta`
 
-_Sign in to more than one Claude Desktop account on the same Mac, each in its own Dock-clickable app._
+_Pool several Claude accounts in one Claude Desktop and switch the active login per Code session._
 
-Claude Desktop only signs in to one Anthropic account at a time — switching means signing out and back in, and losing session history in between. This CLI clones the app once per account, wires each clone to its own OAuth directory (`--user-data-dir` + `CLAUDE_CONFIG_DIR`), and rewrites just enough of the bundle so the Dock lights the right icon for the right window. Sessions and agent metadata are shared safely across clones via symlinks (JSONL, UI, agent) and rsync (Chromium storage), so history follows you between accounts. Ships with three launchd agents that keep clones fresh when Anthropic pushes an update.
+Running more than one Anthropic subscription used to mean cloning Claude.app or re-signing the bundle. This pools every account inside a single Claude Desktop / Claude Code and switches the active login per Code-tab session from a picker mounted next to the model selector. An MV3 extension paints the picker in the Electron renderer, a Bearer-secured loopback daemon holds the account pool, and a CLI shim hot-swaps CLAUDE_CODE_OAUTH_TOKEN between the real claude binary and each session's chosen account. It installs without patching or re-signing the app, applies on launch, and survives Claude updates.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
-<dt>Language</dt><dd>Shell</dd>
+<dt>Language</dt><dd>TypeScript</dd>
 <dt>Visibility</dt><dd>public</dd>
 <dt>License</dt><dd>MIT</dd>
-<dt>Stack</dt><dd>Bash, bats, launchd, macos, mise</dd>
-<dt>Topics</dt><dd>`bash` `claude` `claude-desktop` `electron` `launchd` `macos` `multi-account` `oauth`</dd>
+<dt>Stack</dt><dd>TypeScript, Electron, Chrome extension, Node, esbuild, macOS</dd>
+<dt>Topics</dt><dd>`claude` `claude-code` `claude-desktop` `browser-extension` `oauth` `multi-account` `macos`</dd>
 </dl>
 
 **Products**
 
-- `claude-multiacct` — CLI for installing account instances, sharing sessions between them, repairing drifted clones, and following the sync log.
-
-[homepage](https://github.com/kaelys-js/claude-multiacct) · [issues](https://github.com/kaelys-js/claude-multiacct/issues) · [discussions](https://github.com/kaelys-js/claude-multiacct/discussions)
+- `cli-shim` — Drop-in `claude` wrapper that resolves the session's chosen account and swaps CLAUDE_CODE_OAUTH_TOKEN before exec'ing the real binary.
+- `watcher` — launchd agent that keeps the shim installed and re-applies it after Claude Desktop updates.
+- `http-bridge` — Loopback HTTP daemon (127.0.0.1, Bearer-secured) that holds the account pool and answers both the picker and the shim.
+- `extension` — MV3 extension injected into the renderer that paints the account picker next to the model selector.
 
 ### [kaelys-js-infra](https://github.com/kaelys-js/kaelys-js-infra) `stable`
 
