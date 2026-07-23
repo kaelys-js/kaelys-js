@@ -87,9 +87,9 @@ One workspace for a set of small self-hosted services and tools, from DNS ad-blo
 
 ### [foundation-registry](https://github.com/kaelys-js/foundation-registry) `wip`
 
-_Every decision the firm has made, stored as versioned Markdown records with schemas and clear ownership._
+_The decisions behind the work, written down and easy to find later._
 
-Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody can find the reasoning six months later. This repo keeps them as Markdown-with-YAML-frontmatter records — PRDs, PDRs, ADRs, SPECs, Tasks, Releases — validated by JSON Schema and routed to named teams via CODEOWNERS. Records partition by domain (governance, design, frontend, backend, infra, security, data, observability) and cross-link forward: PRD → PDR/ADR → SPEC → Tasks → Release. It's the record of what the firm decided and why — not a runtime application.
+Decisions scatter across chat and one-off docs, and the reasoning is gone six months later. This keeps them as plain Markdown records, each owned by a team and linked in order from requirement to release, so the why is always there. It's a record, not a running app.
 
 <dl>
 <dt>Since</dt><dd>2026</dd>
@@ -101,11 +101,8 @@ Firm-level decisions scatter across wikis, chat, and one-off docs, and nobody ca
 
 **Products**
 
-- `config` — Shared configs for every tool the firm uses — tsconfig base, oxlint, oxfmt, taplo, syncpack, markdownlint, yamllint, commitlint, gitleaks, editorconfig, lefthook.
-- `core` — Small runtime helpers (repoRoot, miseExec) that qa and sync both depend on.
-- `qa` — Lint, format, and structural checks across the whole tree — gitmeta, editorconfig, lefthook, and JSON-schema validation, all under one command.
-- `sync` — Drift guard for generated files — version pins, vendored schemas, Turbo config, and the post-checkout/merge hooks that keep them in step.
-- `registry` — The record spine itself — PRD, PDR, ADR, SPEC, tasks, releases — validated against a JSON Schema and rendered as a browseable index site.
+- `registry` — The records themselves, checked for consistency and published as a browsable index.
+- `trp` — A protocol for working a ticket through to a decision, with a check that the result holds up.
 
 ### [claude-multiacct](https://github.com/kaelys-js/claude-multiacct) `beta`
 
