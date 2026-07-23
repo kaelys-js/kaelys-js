@@ -1,0 +1,11 @@
+{
+	"$schema": "https://raw.githubusercontent.com/kaelys-js/kaelys-js/main/schema/kaelys-catalog.schema.json",
+	"name": "kaelys-js",
+	"tagline": "I turn sprawl into systems.",
+	"sellMe": "I turn sprawl into systems. The infrastructure a team runs on, the standards it holds, and the decisions behind them all live as code, so what people depend on stays consistent, reviewable, and quick to change. I build the tooling and guardrails that let a small team operate like a much larger one, and I hold how the work is run to the same bar as the work itself.",
+	"status": "stable",
+	"since": 2026,
+	"primaryLanguage": "JavaScript",
+	"technology": ["JavaScript", "Node", "pnpm", "JSON Schema", "Ajv", "Vitest"],
+	"topics": ["github-org-profile", "profile-readme", "catalog", "json-schema", "pnpm", "automation"]
+}
