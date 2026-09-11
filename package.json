@@ -40,7 +40,7 @@
 		"@commitlint/config-conventional": "21.2.0",
 		"@vitest/coverage-v8": "4.1.10",
 		"lefthook": "2.1.10",
-		"vitest": "4.1.10"
+		"vitest": "4.1.11"
 	},
 	"engines": {
 		"node": ">=26.4.0",
